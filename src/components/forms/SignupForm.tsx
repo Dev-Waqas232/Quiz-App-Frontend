@@ -1,8 +1,25 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { SignupSchema } from "../../form-validations";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
+type RoleType = "teacher" | "student"
 const SignupForm = () => {
+
+  const [role,setRoles] = useState<RoleType>("teacher")  
+
+  const handleRoleClick = () => {
+    setRoles(prevState => {
+      if(prevState === "teacher"){
+        prevState = "student"
+      }else{
+        prevState = "teacher"
+      }
+      return prevState
+    })
+  }
+ 
+
   return (
     <div className="flex min-h-screen ">
       <div className="rounded-lg shadow-lg p-8 w-full mt-12">
@@ -119,12 +136,17 @@ const SignupForm = () => {
                 </div>
               </div>
               <div className="w-full flex flex-col justify-center items-center">
+                <div className="flex w-full gap-6">
+
                 <button
                   type="submit"
-                  className="w-full py-2 px-4 bg-[#24ae7c] text-white rounded-md "
-                >
-                  Submit
+                  className="w-full p-2 bg-[#24ae7c] text-white rounded-md "
+                  >
+                  Sign Up
                 </button>
+                <button onClick={handleRoleClick} type="button" className="w-full p-2 bg-[#24ae7c] text-white rounded-md "
+                  >Sign up as {role === "teacher" ? "Student" : "Teacher"}</button>
+                  </div>
                 <Link to="/auth/signin" className="text-[#ABB8C4] mt-3">
                   Already have an account ?{" "}
                   <span className="text-[#24ae7c]">Sign in</span>
