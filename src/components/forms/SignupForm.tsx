@@ -2,6 +2,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { SignupSchema } from "../../form-validations";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import {motion} from "framer-motion"
 
 type RoleType = "teacher" | "student"
 const SignupForm = () => {
@@ -138,14 +139,15 @@ const SignupForm = () => {
               <div className="w-full flex flex-col justify-center items-center">
                 <div className="flex w-full gap-6">
 
-                <button
+                <motion.button
+                whileTap={{scale:0.98}}
                   type="submit"
-                  className="w-full p-2 bg-[#24ae7c] text-white rounded-md "
+                  className=" w-full p-2 bg-[#24ae7c] text-white rounded-md"
                   >
                   Sign Up
-                </button>
-                <button onClick={handleRoleClick} type="button" className="w-full p-2 bg-[#24ae7c] text-white rounded-md "
-                  >Sign up as {role === "teacher" ? "Student" : "Teacher"}</button>
+                </motion.button>
+                <motion.button whileTap={{scale:0.98}} onClick={handleRoleClick} type="button" className="w-full p-2 bg-[#24ae7c] text-white rounded-md"
+                  >Sign up as {role === "teacher" ? "Student" : "Teacher"}</motion.button>
                   </div>
                 <Link to="/auth/signin" className="text-[#ABB8C4] mt-3">
                   Already have an account ?{" "}
