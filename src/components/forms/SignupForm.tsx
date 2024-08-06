@@ -2,24 +2,23 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { SignupSchema } from "../../form-validations";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import {motion} from "framer-motion"
+import { motion } from "framer-motion";
+import { useAuth } from "../../context/AuthContext";
 
-type RoleType = "teacher" | "student"
+type RoleType = "teacher" | "student";
 const SignupForm = () => {
-
-  const [role,setRoles] = useState<RoleType>("teacher")  
-
+  const [role, setRoles] = useState<RoleType>("teacher");
+  const { registerUser } = useAuth();
   const handleRoleClick = () => {
-    setRoles(prevState => {
-      if(prevState === "teacher"){
-        prevState = "student"
-      }else{
-        prevState = "teacher"
+    setRoles((prevState) => {
+      if (prevState === "teacher") {
+        prevState = "student";
+      } else {
+        prevState = "teacher";
       }
-      return prevState
-    })
-  }
- 
+      return prevState;
+    });
+  };
 
   return (
     <div className="flex min-h-screen ">
@@ -31,14 +30,13 @@ const SignupForm = () => {
           initialValues={{
             firstName: "",
             lastName: "",
-            dob: "",
             email: "",
             password: "",
             confirm_password: "",
           }}
           validationSchema={SignupSchema}
           onSubmit={(values) => {
-            console.log(values);
+            registerUser(values, role);
           }}
         >
           {() => (
@@ -138,17 +136,22 @@ const SignupForm = () => {
               </div>
               <div className="w-full flex flex-col justify-center items-center">
                 <div className="flex w-full gap-6">
-
-                <motion.button
-                whileTap={{scale:0.98}}
-                  type="submit"
-                  className=" w-full p-2 bg-[#24ae7c] text-white rounded-md"
+                  <motion.button
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    className=" w-full p-2 bg-[#24ae7c] text-white rounded-md"
                   >
-                  Sign Up
-                </motion.button>
-                <motion.button whileTap={{scale:0.98}} onClick={handleRoleClick} type="button" className="w-full p-2 bg-[#24ae7c] text-white rounded-md"
-                  >Sign up as {role === "teacher" ? "Student" : "Teacher"}</motion.button>
-                  </div>
+                    Sign Up
+                  </motion.button>
+                  <motion.button
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleRoleClick}
+                    type="button"
+                    className="w-full p-2 bg-[#24ae7c] text-white rounded-md"
+                  >
+                    Sign up as {role === "teacher" ? "Student" : "Teacher"}
+                  </motion.button>
+                </div>
                 <Link to="/auth/signin" className="text-[#ABB8C4] mt-3">
                   Already have an account ?{" "}
                   <span className="text-[#24ae7c]">Sign in</span>
