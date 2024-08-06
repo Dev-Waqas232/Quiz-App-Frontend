@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 type AuthProviderProps = {
@@ -29,6 +30,7 @@ export function useAuth() {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState(null);
+  const navigate = useNavigate();
 
   //    Registering User
   async function registerUser(formData: any, role: "teacher" | "student") {
@@ -53,11 +55,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   //  Authenticate User
   function authenticate() {
-    console.log("Hello");
     const user = JSON.parse(localStorage.getItem("user") as string);
     if (user) {
       setIsAuthenticated(true);
       setUserId(user.newUser._id);
+      navigate("/teacher/dashboard");
     }
   }
 
@@ -73,7 +75,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   //  Authentication status on app load
   useEffect(() => {
     authenticate();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <AuthContext.Provider
