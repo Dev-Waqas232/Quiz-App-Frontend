@@ -1,5 +1,11 @@
 import axios from "axios";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { toast } from "react-toastify";
 
 type AuthProviderProps = {
@@ -11,6 +17,7 @@ type AuthContext = {
   userId: null | string;
   registerUser: (formData: any, role: "teacher" | "student") => void;
   authenticate: () => void;
+  logout: () => void;
 };
 
 const AuthContext = createContext({} as AuthContext);
@@ -39,7 +46,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         toast.success("Account created successfully");
       }
     } catch (error: any) {
-      toast.error(error.response.data.message);
+      const errorMessage = error.response?.data?.message || "An error occurred";
+      toast.error(errorMessage);
     }
   }
 
@@ -49,13 +57,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const user = JSON.parse(localStorage.getItem("user") as string);
     if (user) {
       setIsAuthenticated(true);
-      setUserId(user._id);
+      setUserId(user.newUser._id);
     }
   }
 
+  // Logout User
+  function logout() {
+    setIsAuthenticated(false);
+    setUserId(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("auth");
+    toast.success("Logged out successfully");
+  }
+
+  //  Authentication status on app load
+  useEffect(() => {
+    authenticate();
+  }, []);
+
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, userId, registerUser, authenticate }}
+      value={{ isAuthenticated, userId, registerUser, authenticate, logout }}
     >
       {children}
     </AuthContext.Provider>
